@@ -5,7 +5,6 @@ __email__   = 'ybs0306748@gmail.com'
 
 import sys
 import os
-from os.path import isdir
 import dill     #儲存模型與label map資料用
 import numpy as np
 import random
@@ -93,8 +92,6 @@ def query_ans(q):
 
 
 def main():
-    path = os.getcwd()
-
     ################# training #################
     #重新訓練模型
     if query_ans('是否重新訓練模型 ?'):
@@ -128,13 +125,13 @@ def main():
         else:
             #從檔案讀取training data
             training_data_list = []
-            for dir_label in os.listdir(path + '/training'):
-                if isdir(path + '/training/' + dir_label):
+            for dir_label in os.listdir('training'):
+                if os.path.isdir('training/' + dir_label):
                     dataset.append((dir_label, index))
                     index += 1
                     #print(dir_label)
-                    for files in os.listdir(path + '/training/' + dir_label):
-                        fullpath = path + '/training/' + dir_label + '/' + files
+                    for files in os.listdir('training/' + dir_label):
+                        fullpath = 'training/' + dir_label + '/' + files
 
                         image = cv2.imread(fullpath, cv2.IMREAD_GRAYSCALE)
                         img = np.reshape(image,(1, 784)).astype('float32')
@@ -157,7 +154,7 @@ def main():
         input_nodes = 784
         hidden_nodes = 150
         output_nodes = index
-        learning_rate = 0.05
+        learning_rate = 0.04
 
         n = neuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 
@@ -252,8 +249,8 @@ def main():
     print('\n------------ 開始testing data ------------')
     #讀檔存入dict
     test_data_dict = {}
-    for dir_label in os.listdir(path + '/test'):
-        image = cv2.imread(path + '/test/' + dir_label, cv2.IMREAD_GRAYSCALE)
+    for dir_label in os.listdir('testing'):
+        image = cv2.imread('testing/' + dir_label, cv2.IMREAD_GRAYSCALE)
         img = np.reshape(image,(1, 784)).astype('float32')
 
         #去掉副檔名.png
