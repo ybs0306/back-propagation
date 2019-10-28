@@ -247,14 +247,21 @@ def main():
 
     ################## testing ##################
     print('\n------------ 開始testing data ------------')
+    if os.path.exists('testing'):
+        pass
+    else:
+        print('測試資料夾不存在')
+        sys.exit(0)
+
     #讀檔存入dict
     test_data_dict = {}
     for dir_label in os.listdir('testing'):
-        image = cv2.imread('testing/' + dir_label, cv2.IMREAD_GRAYSCALE)
-        img = np.reshape(image,(1, 784)).astype('float32')
+        if dir_label != '.DS_Store':
+            image = cv2.imread('testing/' + dir_label, cv2.IMREAD_GRAYSCALE)
+            img = np.reshape(image,(1, 784)).astype('float32')
 
-        #去掉副檔名.png
-        test_data_dict[dir_label[:-4]] = img
+            #去掉副檔名.png
+            test_data_dict[dir_label[:-4]] = img
 
     print(f'test data 共有{len(test_data_dict)}筆資料')
     #按照照片名排序
@@ -274,9 +281,12 @@ def main():
 
         #print(record + ' ' + str(label_t))
         f.write(record + ' ' + str(label_t) + '\n')
-
     f.close()
-    print('測試結果已輸出至Answer.txt\n')
+
+    if len(test_data_dict) > 0:
+        print('測試結果已輸出至Answer.txt')
+    
+    print('')
 
 
 if __name__ == "__main__":
